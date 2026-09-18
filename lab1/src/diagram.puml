@@ -1,0 +1,48 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class View {
+    - inputButton: JButton
+    - resultLabel: JLabel
+    - lastInputLabel: JLabel
+    --
+    + setInputButtonListener()
+    + updateResult(population: long)
+    + updateLastInput(date: String)
+    + saveData(date: String, result: String)
+    + loadSavedData()
+}
+
+class InputDialog {
+    - dateField: JTextField
+    - calculateButton: JButton
+    --
+    + setCalculateListener()
+    + getDateInput(): String
+    + setDateInput(date: String)
+    + showDialog()
+    + closeDialog()
+    + showError(message: String)
+}
+
+class Model {
+    - BASE_DATE: LocalDate
+    - BASE_POPULATION: long
+    - GROWTH_PER_DAY: double
+    --
+    + calculatePopulation(dateStr: String): long
+    - parseDate(dateStr: String): LocalDate
+}
+
+class Controller {
+    - lastDate: String
+    --
+    + Controller(view: View, model: Model, dialog: InputDialog)
+}
+
+Controller --> View : управляет
+Controller --> Model : вызывает
+Controller --> InputDialog : открывает
+Model --> View : обновляет\n(активная модель)
+View --> InputDialog : открывает
+@enduml
